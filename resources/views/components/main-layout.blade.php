@@ -10,8 +10,13 @@
     <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
 </head>
 <body>
+
+    <x-navbar /> 
+    <x-logo />
    
     {{ $slot }}
+
+    <x-footer />
     
     <script src="{{ asset('assets/bootstrap/bootstrap.bundle.min.js') }}"></script>
 </body>
