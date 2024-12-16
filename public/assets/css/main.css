@@ -1,19 +1,43 @@
+:root {
+    --cor-de-fundo: linear-gradient(90deg, rgba(3,39,62,1) 0%, rgba(3,35,52,1) 10%, rgba(2,27,43,1) 24%, rgba(2,31,50,1)
+   46%, rgba(2,27,43,1) 74%, rgba(3,35,52,1) 86%, rgba(3,39,62,1) 98%);   
+}
+
 body {
     margin: 0;
     background-color: #f6f7f8;
     color: white;
 }
 
+.body-login {
+    margin: 0;
+    width: 100%;
+    background: var(--cor-de-fundo);
+}
+
+.imagem-container {
+    height: 100vh;
+    width: 100%;
+}
+
+.img-fluid {
+    height: 100vh !important;
+    object-fit: cover; 
+}
+
+.card {
+    background-color: white;   
+    color: black;              
+    border-radius: 8px;                   
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+}
+
 .navbar {
-    background: linear-gradient(90deg, rgba(3,39,62,1) 0%, rgba(3,35,52,1) 10%, 
-        rgba(2,27,43,1) 24%, rgba(2,31,50,1) 46%, rgba(2,27,43,1) 74%, 
-        rgba(3,35,52,1) 86%, rgba(3,39,62,1) 98%);
+    background: var(--cor-de-fundo);
 }
 
 .dropdown-menu {
-    background: linear-gradient(90deg, rgba(3,39,62,1) 0%, rgba(3,35,52,1) 10%, 
-        rgba(2,27,43,1) 24%, rgba(2,31,50,1) 46%, rgba(2,27,43,1) 74%, 
-        rgba(3,35,52,1) 86%, rgba(3,39,62,1) 98%);
+    background:var(--cor-de-fundo);
 }
 
 .logo {

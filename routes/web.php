@@ -16,13 +16,12 @@ Route::get('/', function(){
     }
 });
 
-Route::get('/login', [AutenticController::class, 'login']);
-Route::get('/logout', [AutenticController::class, 'logout']);
+Route::post('/login', [AutenticController::class, 'login'])->name('login');
+Route::view('/login', 'auth.login')->name('login.view');
+// Route::get('/logout', [AutenticController::class, 'logout']);
 
-Route::get('/admin', function(){
-    $admin = Usuario::find(1);
-    dd($admin->toArray());
+
+
+Route::middleware('auth')->group(function(){
+    Route::view('/home', 'home');
 });
-
-
-Route::view('/home', 'home');
