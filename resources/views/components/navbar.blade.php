@@ -27,5 +27,18 @@
           </li>
         </ul>
       </div>
+      <div class="d-flex align-items-center">
+        <i class="fas fa-user-circle me-3"></i>
+        <a href="#" class="text-white me-3">
+          {{ auth()->user()->nome }}
+        </a>
+
+        <form action="{{ route('logout')}}" method="post">
+          @csrf
+          <button type="submit" class="btn btn-sm btn-danger">
+            <i class="fas fa-sign-out-alt">Sair</i>
+          </button>
+        </form>      
+      </div>
     </div>
   </nav>

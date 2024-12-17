@@ -28,7 +28,7 @@ return [
     |
     */
 
-    'passwords' => 'users',
+    'passwords' => 'usuarios',
 
     /*
     |--------------------------------------------------------------------------
@@ -132,6 +132,11 @@ return [
 
     'views' => true,
 
+
+    'models' => [
+        'user' => App\Models\Usuario::class,
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Features
@@ -148,7 +153,7 @@ return [
         Features::resetPasswords(),
         Features::emailVerification(),
         Features::updateProfileInformation(),
-        Features::updatePasswords(),        
+        Features::updatePasswords(),
     ],
 
 ];

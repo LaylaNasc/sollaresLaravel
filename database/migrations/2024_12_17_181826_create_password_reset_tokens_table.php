@@ -11,16 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('usuarios', function (Blueprint $table) {
+        Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->id();
-            $table->string('nome', 255); 
-            $table->string('cargo', 100); 
-            $table->string('login', 50)->unique(); 
-            $table->string('senha', 100); //tive que alterar para password
-            $table->string('email', 255)->unique();
+            $table->string('email')->index();
+            $table->string('token');
             $table->timestamps();
-            $table->softDeletes();
-            
         });
     }
 
@@ -29,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('usuarios');
+        Schema::dropIfExists('password_reset_tokens');
     }
 };

@@ -3,7 +3,6 @@
         <div class="container-fluid p-0">
             <div class="row mx-0 w-100 h-100">
 
-                <!-- Seção do Formulário -->
                 <section class="col-md-5 d-flex justify-content-center align-items-center p-0">
                     <div class="card p-5 w-75">
                         <div class="text-center mb-5">
@@ -28,14 +27,18 @@
                             </div>
 
                             <div class="d-flex justify-content-between align-items-center">
-                                <a class="text-dark" href="#">Esqueceu a sua senha?</a>
+                                <a class="text-dark" href="{{ route('password.request')}}">Esqueceu a sua senha?</a>
                                 <button type="submit" class="btn btn-primary px-4">Entrar</button>
                             </div>
                         </form>
+                        @if(session('status'))
+                        <div class="alert alert-success mt-3 text-center">
+                            {{ session('status') }}
+                        </div>
+                    @endif
                     </div>
                 </section>
 
-                <!-- Seção da Imagem -->
                 <section class="col-md-7 p-0">
                     <img src="{{ asset('assets/images/img-login.png') }}" alt="Imagem" class="img-fluid w-100">
                 </section>

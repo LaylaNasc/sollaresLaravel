@@ -22,4 +22,10 @@ class AutenticController extends Controller
             'login' => 'Credenciais inválidas.',
         ])->withInput($request->except('senha'));
     }
+
+    public function logout()
+    {
+        Auth::logout();
+        return redirect()->route('login.view')->with('success', 'Logout realizado com sucesso!');
+    }
 }

@@ -18,7 +18,7 @@ class AdminSeeder extends Seeder
             'nome' => 'Administrador',
             'cargo' => 'Admin',
             'login' => 'admin',
-            'senha' => bcrypt('senhaSegura123'), 
+            'password' => bcrypt('senhaSegura123'), 
             'email' => 'admin@gmail.com',
             'created_at' => now(),
             'updated_at' => now(),
