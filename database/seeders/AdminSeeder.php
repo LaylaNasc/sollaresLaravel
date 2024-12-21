@@ -20,6 +20,7 @@ class AdminSeeder extends Seeder
             'login' => 'admin',
             'password' => bcrypt('senhaSegura123'), 
             'email' => 'admin@gmail.com',
+            'remember_token' => null,
             'created_at' => now(),
             'updated_at' => now(),
         ]);

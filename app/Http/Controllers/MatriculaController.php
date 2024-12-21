@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Disciplina;
 use App\Models\Matricula;
+use App\Models\Pessoa;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -22,7 +24,9 @@ class MatriculaController extends Controller
      */
     public function create(): View
     {
-        return view('matricula.add-matricula');
+        $pessoas = Pessoa::all();
+        $disciplinas = Disciplina::all(); 
+        return view('matricula.add-matricula', compact('pessoas', 'disciplinas'));
     }
 
     /**
@@ -30,7 +34,23 @@ class MatriculaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'aluno_id' => 'required|exists:pessoas,id',
+            'disciplina_id' => 'required|exists:disciplinas,id', 
+            'dataMatricula' => 'required|date',
+            'valorPago' => 'required|numeric', 
+            'periodo' => 'required|string',
+        ]);        
+
+        Matricula::create([
+            'aluno_id' => $request->aluno_id,
+            'disciplina_id' => $request->disciplina_id,
+            'dataMatricula' => $request->dataMatricula,
+            'valorPago' => $request->valorPago,
+            'periodo' => $request->periodo,
+        ]);
+
+        return redirect()->route('matriculas');
     }
 
     /**
@@ -46,15 +66,37 @@ class MatriculaController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        if(intval($id) === 1){
+            return redirect()->route('matriculas');
+        }
+
+        $matricula = Matricula::findOrFail($id);
+        $pessoas = Pessoa::all();  
+        $disciplinas = Disciplina::all();  
+        return view('matricula.edit-matricula', compact('matricula', 'pessoas', 'disciplinas'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
-        //
+        $id = $request->id;
+        //tenho que alterar esse id ===1
+            if (intval($id) === 1) {
+                return redirect()->route('matriculas');
+            }
+        
+            $matricula = Matricula::findOrFail($id);  
+            $matricula->update([
+                'aluno_id' => $request->aluno_id,
+                'disciplina_id' => $request->disciplina_id,
+                'dataMatricula' => $request->dataMatricula,
+                'valorPago' => $request->valorPago,
+                'periodo' => $request->periodo,
+            ]);
+    
+            return redirect()->route('matriculas');    
     }
 
     /**

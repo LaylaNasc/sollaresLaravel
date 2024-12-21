@@ -34,7 +34,7 @@ class PessoaController extends Controller
             'nomePessoa' => 'required|string|max:255',
             'endereco' => 'required|string|max:255',
             'uf' => 'required|string|size:2',
-            'telefone' => 'required|string|regex:/^\(\d{2}\) \d{4,5}-\d{4}$/',
+            'telefone' => 'required|string|regex:/^\(\d{2}\)\s?\d{4,5}-?\d{4}$/',
             'cpf' => 'required|string|size:14|unique:pessoas,cpf',
             'email' => 'required|string|email|max:255|unique:pessoas,email',
         ]);
@@ -48,7 +48,7 @@ class PessoaController extends Controller
             'email' => $request->email,
         ]);
     
-        return redirect()->route('pessoas')->with('success', 'Pessoa criada com sucesso!');
+        return redirect()->route('pessoas');
     }
 
     /**
@@ -60,23 +60,45 @@ class PessoaController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * apresentar view
      */
     public function edit(string $id)
     {
-        //
-    }
+        if(intval($id) === 1){
+            return redirect()->route('pessoas');
+        }
 
+        $pessoa = Pessoa::findOrFail($id);  
+        return view('pessoa.edit-pessoa', compact('pessoa'));  
+    }
     /**
-     * Update the specified resource in storage.
+     * editar
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
-        //
+
+    $id = $request->id;
+    //tenho que alterar esse id ===1
+    if (intval($id) === 1) {
+        return redirect()->route('pessoas');
+    }
+
+    $pessoa = Pessoa::findOrFail($id);
+    $pessoa->update([
+        'nomePessoa' => $request->nomePessoa,
+        'email' => $request->email,
+        'telefone' => $request->telefone,
+        'endereco' => $request->endereco,               
+        'cpf' => $request->cpf,
+        'uf' => $request->uf,
+    ]);
+
+    return redirect()->route('pessoas');
+
     }
 
     /**
-     * Remove the specified resource from storage.
+     * deletar
      */
     public function destroy(string $id)
     {

@@ -10,8 +10,8 @@
                     @csrf
     
                     <div class="col-md-6">
-                        <label for="nome" class="form-label text-dark">Nome da Pessoa</label>
-                        <input type="text" class="form-control" id="nome" name="nome" required>
+                        <label for="nomePessoa" class="form-label text-dark">Nome da Pessoa</label>
+                        <input type="text" class="form-control" id="nomePessoa" name="nomePessoa" required>
                         @error('nome')
                         <div class="text-danger">{{ $message }}</div>
                         @enderror

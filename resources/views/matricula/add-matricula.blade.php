@@ -11,29 +11,31 @@
 
                 <div class="col-md-6">
                     <label for="text" class="form-label text-dark">Disciplina</label>
-                    <select class="form-select" id="text" name="text" required>
-                        <option selected disabled value="">Selecione...</option>                        
+                    <select class="form-select" id="disciplina" name="disciplina_id" required>
+                        <option selected disabled value="">Selecione...</option>
+                            @foreach($disciplinas as $disciplina)
+                            <option value="{{ $disciplina->id }}">{{ $disciplina->nomeDisciplina }}</option>
+                        @endforeach                              
                     </select>
-                    @error('name')
-                    <div class="text-danger">{{ $message }}</div>
+                    @error('disciplina_id')
+                        <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
-
                 <div class="col-md-6">
                     <label for="date" class="form-label text-dark">Horario</label>
-                    <input type="date" class="form-control" id="date" name="date" required>
+                    <input type="date" class="form-control" id="date" name="dataMatricula" required>
                     @error('dataMatricula')
                     <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="col-md-6">
                     <label for="text" class="form-label text-dark">Aluno</label>
-                    <select class="form-select" id="text" name="text" required>
-                        <option selected disabled value="">Selecione...</option>                        
-                    </select>
-                    @error('name')
-                    <div class="text-danger">{{ $message }}</div>
-                    @enderror
+                        <select class="form-select" id="aluno" name="aluno_id" required>
+                            <option selected disabled value="">Selecione...</option>
+                            @foreach($pessoas as $pessoa)
+                                <option value="{{ $pessoa->id }}">{{ $pessoa->nomePessoa }}</option>
+                            @endforeach                        
+                        </select>                    
                 </div>
                 <div class="col-md-6">
                     <label for="number" class="form-label text-dark">Valor</label>

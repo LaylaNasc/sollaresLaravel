@@ -40,7 +40,7 @@ class UsuarioController extends Controller
             'nome'  => 'required|string|max:255',
             'cargo' => 'required|string|max:100',
             'login' => 'required|string|max:50|unique:usuarios,login',
-            'password' => 'required|string|min:8|confirmed',
+            'password' => 'required|string|min:8|max:16',
             'email' => 'required|email|max:255|unique:usuarios,email',
         ], [
             'required' => 'O campo :attribute é obrigatório.',
@@ -57,7 +57,7 @@ class UsuarioController extends Controller
             'email' => $request->email,
         ]);
 
-        return redirect()->route('usuarios')->with('success', 'Usuário criado com sucesso!');
+        return redirect()->route('usuarios');
 
     }
 
@@ -66,7 +66,7 @@ class UsuarioController extends Controller
      */
     public function show(string $id)
     {
-        //
+        //não esquecer
     }
 
     /**
@@ -74,15 +74,36 @@ class UsuarioController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        if(intval($id) === 1){
+            return redirect()->route('usuarios');
+        }
+
+        $usuario = Usuario::findOrFail($id);
+        return view('usuario.edit-usuario', compact('usuario'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
-        //
+        $id = $request->id;
+
+        if(intval($id) === 1 ){
+            return redirect()->route('usuarios');
+        }
+
+        $usuario = Usuario::findOrFail($id);
+
+        $usuario->update([
+            'nome'  => $request->nome,
+            'cargo' => $request->cargo,
+            'login' => $request->login,
+            'password' => bcrypt($request->senha),  
+            'email' => $request->email,
+        ]);
+
+        return redirect()->route('usuarios');
     }
 
     /**

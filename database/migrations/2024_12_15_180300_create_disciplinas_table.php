@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nomeDisciplina', 255);
             $table->integer('codigo');
             $table->integer('cargaHoraria');
-            $table->integer('limiteAlunos');
+            $table->integer('limiteAlunos'); 
             $table->foreignId('professor_id')->constrained('pessoas');
             $table->timestamps();
             $table->softDeletes();
