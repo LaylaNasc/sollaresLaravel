@@ -9,20 +9,16 @@ use Illuminate\View\View;
 
 class UsuarioController extends Controller
 {
-    /**
-     * listar meus usuários.
-     */
+    // listar meus usuários.
     public function index()
     {
-        Gate::authorize('Admin') ?: abort(403, 'Você não tem autorização para criar um novo usuário.');
-        
+                
         $usuarios = Usuario::all();
+        $usuarios = Usuario::where('id', '!=', 1)->get(); // os dados do admin não apareceram na tabela
         return view('usuario.usuarios', compact('usuarios'));
     }
 
-    /**
-     * apresentar a view
-     */
+    //apresentar a view
     public function create(): View
     {
         Gate::authorize('Admin') ?: abort(403, 'Você não tem autorização para criar um novo usuário.');
@@ -30,9 +26,7 @@ class UsuarioController extends Controller
         return view('usuario.add-usuario');
     }
 
-    /**
-     * submeter o formulario
-     */
+   // submeter o formulario
     public function store(Request $request)
     {
         Gate::authorize('Admin') ?: abort(403, 'Você não tem autorização para criar um novo usuário.');
@@ -61,17 +55,13 @@ class UsuarioController extends Controller
 
     }
 
-    /**
-     * Display the specified resource.
-     */
+    // buscar os dados 
     public function show(string $id)
     {
         //não esquecer
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+  // apresentar view
     public function edit(string $id)
     {
         if(intval($id) === 1){
@@ -82,12 +72,38 @@ class UsuarioController extends Controller
         return view('usuario.edit-usuario', compact('usuario'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    // alterar dados
     public function update(Request $request)
     {
         $id = $request->id;
+
+        if (intval($id) === 1) {
+            return redirect()->route('usuarios');
+        }
+    
+        $usuario = Usuario::findOrFail($id);
+    
+        $data = [
+            'nome'  => $request->nome,
+            'cargo' => $request->cargo,
+            'login' => $request->login,
+            'email' => $request->email,
+        ];
+    
+        // Verifica se foi enviada uma nova senha
+        if ($request->filled('password')) {
+            $data['password'] = bcrypt($request->password); // Re-hasheia a nova senha
+        }
+    
+        $usuario->update($data);
+    
+        return redirect()->route('usuarios');
+    }
+
+   //só o admin pode deletar usuários
+    public function destroy(string $id)
+    {
+        Gate::authorize('Admin') ?: abort(403, 'Você não tem autorização para criar um novo usuário.'); 
 
         if(intval($id) === 1 ){
             return redirect()->route('usuarios');
@@ -95,22 +111,23 @@ class UsuarioController extends Controller
 
         $usuario = Usuario::findOrFail($id);
 
-        $usuario->update([
-            'nome'  => $request->nome,
-            'cargo' => $request->cargo,
-            'login' => $request->login,
-            'password' => bcrypt($request->senha),  
-            'email' => $request->email,
-        ]);
+        return view('usuario.delete-usuario-confirm', compact('usuario'));
 
-        return redirect()->route('usuarios');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function deleteConfirm(string $id)
     {
-        //
+        Gate::authorize('Admin') ?: abort(403, 'Você não tem autorização para criar um novo usuário.'); 
+
+        if(intval($id) === 1 ){
+            return redirect()->route('usuarios');
+        }
+
+        $usuario = Usuario::findOrFail($id);
+
+        $usuario->delete();
+
+        return redirect()->route('usuarios');
+
     }
 }

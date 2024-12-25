@@ -23,8 +23,8 @@
                     @foreach ($matriculas as $matricula)
                         <tr>
                             <td>{{ $matricula->disciplina->nomeDisciplina ?? 'Sem disciplina' }}</td>
-                            <td>{{ $matricula->dataMatricula }}</td>
-                            <td>{{ $matricula->valorPago }}</td>
+                            <td>{{ \Carbon\Carbon::createFromFormat('d/m/Y', $matricula->dataMatricula)->format('d/m/Y') }}</td>
+                            <td>{{ 'R$ ' . number_format(floatval(str_replace(',', '.', $matricula->valorPago)), 2, ',', '.') }}</td>
                             <td>{{ $matricula->aluno->nomePessoa ?? 'Sem aluno'}}</td>
                             <td>{{ $matricula->periodo }}</td>
                             <td>
@@ -32,8 +32,8 @@
                                     <a href="{{ route('matriculas.editar-matricula', ['id' => $matricula->id]) }}" class="text-warning me-3" title="Editar">
                                         <i class="fa-solid fa-pen-to-square fa-lg"></i>
                                     </a>
-                                    <a href="#" class="text-danger" title="Deletar">
-                                        <i class="fa-solid fa-trash-can fa-lg"></i>Deletar
+                                    <a href="{{ route('matriculas.deletar-matricula', ['id' => $matricula->id]) }}" class="text-danger" title="Deletar">
+                                        <i class="fa-solid fa-trash-can fa-lg"></i>
                                     </a>
                                 </div>
                             </td>

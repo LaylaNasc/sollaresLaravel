@@ -10,18 +10,21 @@ use Illuminate\View\View;
 
 class MatriculaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+ // listar
     public function index()
     {
         $matriculas = Matricula::all();
+
+        foreach ($matriculas as $matricula) {
+            $matricula->dataMatricula = \Carbon\Carbon::parse($matricula->dataMatricula)->format('d/m/Y');
+            $matricula->valorPago = number_format($matricula->valorPago, 2, ',', '.');
+        }
+        
+    
         return view('matricula.matriculas', compact('matriculas'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    // apresentar a view
     public function create(): View
     {
         $pessoas = Pessoa::all();
@@ -29,9 +32,7 @@ class MatriculaController extends Controller
         return view('matricula.add-matricula', compact('pessoas', 'disciplinas'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+   //criação de matrícula
     public function store(Request $request)
     {
         $request->validate([
@@ -40,7 +41,17 @@ class MatriculaController extends Controller
             'dataMatricula' => 'required|date',
             'valorPago' => 'required|numeric', 
             'periodo' => 'required|string',
-        ]);        
+        ]);
+        
+        // regra sobre limite de alunos 
+        $disciplina = Disciplina::findOrFail($request->disciplina_id);
+        $numeroDeMatriculas = $disciplina->matriculas()->count();
+
+        if ($disciplina->matriculas()->count() >= $disciplina->limiteAlunos) {
+            return redirect()->back()
+                ->withErrors(['limiteAlunos' => 'O limite de alunos para esta disciplina foi atingido.'])
+                ->withInput();
+        }
 
         Matricula::create([
             'aluno_id' => $request->aluno_id,
@@ -48,44 +59,31 @@ class MatriculaController extends Controller
             'dataMatricula' => $request->dataMatricula,
             'valorPago' => $request->valorPago,
             'periodo' => $request->periodo,
-        ]);
+        ]);       
 
         return redirect()->route('matriculas');
     }
 
-    /**
-     * Display the specified resource.
-     */
+    //ainda vou criar
     public function show(string $id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+    //apresentar view de edição
     public function edit(string $id)
     {
-        if(intval($id) === 1){
-            return redirect()->route('matriculas');
-        }
-
+   
         $matricula = Matricula::findOrFail($id);
         $pessoas = Pessoa::all();  
         $disciplinas = Disciplina::all();  
         return view('matricula.edit-matricula', compact('matricula', 'pessoas', 'disciplinas'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+   //alterando os dados
     public function update(Request $request)
     {
         $id = $request->id;
-        //tenho que alterar esse id ===1
-            if (intval($id) === 1) {
-                return redirect()->route('matriculas');
-            }
         
             $matricula = Matricula::findOrFail($id);  
             $matricula->update([
@@ -99,11 +97,31 @@ class MatriculaController extends Controller
             return redirect()->route('matriculas');    
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+   //deletar
     public function destroy(string $id)
     {
+        $matricula = Matricula::with('aluno')->findOrFail($id);   
+
+        return view('matricula.delete-matricula-confirm', compact('matricula'));
+
+    }
+
+    public function deleteConfirm(string $id)
+    {
+        $matricula = Matricula::findOrFail($id);
+
+        $matricula->delete();
+
+        return redirect()->route('matriculas');
+    }
+
+    public function apresntarFaturamento()
+    {
         //
+    }
+
+    public function buscarFaturamento()
+    {
+
     }
 }

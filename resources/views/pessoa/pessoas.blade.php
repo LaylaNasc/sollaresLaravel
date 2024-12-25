@@ -33,7 +33,7 @@
                                     <a href="{{ route('pessoas.editar-pessoa', ['id' => $pessoa->id]) }}" class="text-warning me-3" title="Editar">
                                         <i class="fa-solid fa-pen-to-square fa-lg"></i>
                                     </a>                                    
-                                    <a href="#"class="text-danger" title="Deletar">
+                                    <a href="{{ route('pessoas.deletar-pessoa', ['id' => $pessoa->id]) }}"class="text-danger" title="Deletar">
                                         <i class="fa-solid fa-trash-can fa-lg"></i>
                                     </a>
                                 </div>

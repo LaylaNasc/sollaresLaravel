@@ -1,17 +1,12 @@
 <?php
 
-
 use App\Http\Controllers\AutenticController;
 use App\Http\Controllers\DisciplinaController;
 use App\Http\Controllers\MatriculaController;
 use App\Http\Controllers\PessoaController;
 use App\Http\Controllers\UsuarioController;
-use App\Models\Disciplina;
-use App\Models\Matricula;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
-
-
 
 
 Route::post('/login', [AutenticController::class, 'login'])->name('login');
@@ -28,6 +23,8 @@ Route::middleware('auth')->group(function(){
     Route::post('/usuarios/criar-usuario', [UsuarioController::class, 'store'])->name('usuarios.criar-usuario');
     Route::get('/usuarios/editar-usuario/{id}', [UsuarioController::class, 'edit'])->name('usuarios.editar-usuario');
     Route::post('/usuarios/atualizar-usuario', [UsuarioController::class, 'update'])->name('usuarios.atualizar-usuario');
+    Route::get('/usuarios/delete-usuario/{id}', [UsuarioController::class, 'destroy'])->name('usuarios.deletar-usuario');
+    Route::get('/usuarios/delete-usuario-confirme/{id}', [UsuarioController::class, 'deleteConfirm'])->name('usuarios.deletar-usuario-confirme');
 
 
     //rotas de Pessoa
@@ -36,6 +33,9 @@ Route::middleware('auth')->group(function(){
     Route::post('/pessoas/criar-pessoa', [PessoaController::class, 'store'])->name('pessoas.criar-pessoa');
     Route::get('/pessoas/editar-pessoa/{id}', [PessoaController::class, 'edit'])->name('pessoas.editar-pessoa');
     Route::put('/pessoas/atualizar-pessoa', [PessoaController::class, 'update'])->name('pessoas.atualizar-pessoa');
+    Route::get('/pessoas/delete-pessoa/{id}', [PessoaController::class, 'destroy'])->name('pessoas.deletar-pessoa');
+    Route::get('/pessoas/delete-pessoa-confirme/{id}', [PessoaController::class, 'deleteConfirm'])->name('pessoas.deletar-pessoa-confirme');
+
 
 
     //rotas de disciplina
@@ -44,6 +44,9 @@ Route::middleware('auth')->group(function(){
     Route::post('/disciplinas/criar-disciplina',[DisciplinaController::class, 'store'])->name('disciplinas.criar-disciplina');
     Route::get('/disciplinas/editar-disciplina/{id}', [DisciplinaController::class, 'edit'])->name('disciplinas.editar-disciplina');
     Route::put('/disciplinas/atualizar-disciplina', [DisciplinaController::class, 'update'])->name('disciplinas.atualizar-disciplina');
+    Route::get('/disciplinas/delete-disciplina/{id}', [DisciplinaController::class, 'destroy'])->name('disciplinas.deletar-disciplina');
+    Route::get('/disciplinas/delete-disciplina-confirme/{id}', [DisciplinaController::class, 'deleteConfirm'])->name('disciplinas.deletar-disciplina-confirme');
+
 
 
     //rotas de matricula
@@ -52,5 +55,8 @@ Route::middleware('auth')->group(function(){
     Route::post('/matriculas/criar-matricula', [MatriculaController::class, 'store'])->name('matriculas.criar-matricula');
     Route::get('/matriculas/editar-matricula/{id}', [MatriculaController::class, 'edit'])->name('matriculas.editar-matricula');
     Route::put('/matriculas/atualizar-matricula', [MatriculaController::class, 'update'])->name('matriculas.atualizar-matricula');
+    Route::get('matriculas/delete-matricula/{id}', [MatriculaController::class, 'destroy'])->name('matriculas.deletar-matricula');
+    Route::get('/matriculas/delete-matricula-confirme/{id}', [MatriculaController::class, 'deleteConfirm'])->name('matriculas.deletar-matricula-confirme');
+
 
 });

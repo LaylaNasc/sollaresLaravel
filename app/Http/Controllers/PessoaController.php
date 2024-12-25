@@ -3,31 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pessoa;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class PessoaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+     // listar
     public function index()
     {
         $pessoas = Pessoa::all();
         return view('pessoa.pessoas', compact('pessoas'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    // apresntar view
     public function create(): View
     {
         return view('pessoa.add-pessoa');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+   //criação
     public function store(Request $request)
     {
         $request->validate([
@@ -64,10 +59,7 @@ class PessoaController extends Controller
      */
     public function edit(string $id)
     {
-        if(intval($id) === 1){
-            return redirect()->route('pessoas');
-        }
-
+    
         $pessoa = Pessoa::findOrFail($id);  
         return view('pessoa.edit-pessoa', compact('pessoa'));  
     }
@@ -78,12 +70,9 @@ class PessoaController extends Controller
     {
 
     $id = $request->id;
-    //tenho que alterar esse id ===1
-    if (intval($id) === 1) {
-        return redirect()->route('pessoas');
-    }
 
     $pessoa = Pessoa::findOrFail($id);
+    
     $pessoa->update([
         'nomePessoa' => $request->nomePessoa,
         'email' => $request->email,
@@ -102,6 +91,29 @@ class PessoaController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $pessoa = Pessoa::findOrFail($id);
+
+        return view('pessoa.delete-pessoa-confirm', compact('pessoa'));
     }
+
+    public function deleteConfirm(string $id)
+    {
+        $pessoa = Pessoa::findOrFail($id);
+
+        try {
+            $pessoa->delete();
+            return redirect()->route('pessoas')->with('success', 'Pessoa deletada com sucesso.');
+        } catch (QueryException $e) {
+            if ($e->getCode() === '23000') { // erro de integridade referencial
+                $errorMessage = 'Essa pessoa não pode ser deletada porque está vinculada a uma matrícula.';
+                return view('pessoa.delete-pessoa-confirm', compact('pessoa', 'errorMessage'));
+            }
+    
+            // Para outros erros
+            $errorMessage = 'Ocorreu um erro ao tentar deletar a pessoa.';
+            return view('pessoa.delete-pessoa-confirm', compact('pessoa', 'errorMessage'));
+    }
+
+    }
+    
 }

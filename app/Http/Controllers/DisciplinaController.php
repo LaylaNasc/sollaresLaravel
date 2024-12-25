@@ -9,27 +9,21 @@ use Illuminate\View\View;
 
 class DisciplinaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+     // listar
     public function index()
     {
         $disciplinas = Disciplina::all();
         return view('disciplina.disciplinas', compact('disciplinas'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    // apresentar a view
     public function create(): View
     {
         $pessoas = Pessoa::all(); 
         return view('disciplina.add-disciplina', compact('pessoas'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    //criação
     public function store(Request $request)
     {
         $request->validate([
@@ -58,30 +52,19 @@ class DisciplinaController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+    // ainda vou criar
     public function edit(string $id)
     {
-        if(intval($id) === 1){
-            return redirect()->route('disciplinas');
-        }
-
+       
         $disciplina = Disciplina::findOrFail($id);
         $pessoas = Pessoa::all();  
         return view('disciplina.edit-disciplina', compact('disciplina', 'pessoas'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+     // apresentar view de edição
     public function update(Request $request)
     {
         $id = $request->id;
-    //tenho que alterar esse id ===1
-        if (intval($id) === 1) {
-            return redirect()->route('disciplinas');
-        }
 
         $disciplina = Disciplina::findOrFail($id);  
         $disciplina->update([
@@ -94,11 +77,25 @@ class DisciplinaController extends Controller
         return redirect()->route('disciplinas');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    // deletar
     public function destroy(string $id)
     {
-        //
+        $disciplina = Disciplina::findOrFail($id);
+
+        return view('disciplina.delete-disciplina-confirm', compact('disciplina'));
+
+    }
+
+    public function deleteConfirm(string $id)
+    {
+        $disciplina = Disciplina::findOrFail($id);
+
+        $disciplina->delete();
+
+        if ($disciplina->matriculas()->count() > 0) {
+            return back()->withErrors(['disciplinas_com_matricula' => 'Não é possível excluir esta disciplina, pois existem matrículas associadas a ela.']);
+        }
+
+        return redirect()->route('disciplinas');
     }
 }

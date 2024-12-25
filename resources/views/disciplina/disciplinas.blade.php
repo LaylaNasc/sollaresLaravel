@@ -31,7 +31,7 @@
                                 <a href="{{ route('disciplinas.editar-disciplina', ['id' => $disciplina->id]) }}"  class="text-warning me-3" title="Editar">
                                     <i class="fa-solid fa-pen-to-square fa-lg"></i>
                                 </a>
-                                <a href="#" class="text-danger" title="Deletar">
+                                <a href="{{ route('disciplinas.deletar-disciplina', ['id' => $disciplina->id]) }}" class="text-danger" title="Deletar">
                                     <i class="fa-solid fa-trash-can fa-lg"></i>
                                 </a>
                             </div>

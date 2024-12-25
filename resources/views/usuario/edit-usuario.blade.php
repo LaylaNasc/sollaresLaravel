@@ -35,7 +35,7 @@
         
                         <div class="col-md-6">
                             <label for="password" class="form-label text-dark">Senha</label>
-                            <input type="password" class="form-control" id="password" name="password" required value="{{ $usuario->password }}">
+                            <input type="text" class="form-control" id="password" name="password" required>
                             @error('password')
                             <div class="text-danger">{{ $message }}</div>
                             @enderror

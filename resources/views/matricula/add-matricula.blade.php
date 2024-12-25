@@ -8,6 +8,11 @@
 
             <form action="{{ route('matriculas.criar-matricula') }}" class="row g-3 needs-validation" novalidate method="post">
                 @csrf
+                @if ($errors->has('limiteAlunos'))
+                    <div class="alert alert-danger">
+                        {{ $errors->first('limiteAlunos') }}
+                    </div>
+                @endif
 
                 <div class="col-md-6">
                     <label for="text" class="form-label text-dark">Disciplina</label>
@@ -17,7 +22,7 @@
                             <option value="{{ $disciplina->id }}">{{ $disciplina->nomeDisciplina }}</option>
                         @endforeach                              
                     </select>
-                    @error('disciplina_id')
+                    @error('limiteAlunos')
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
@@ -56,7 +61,6 @@
                     <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
-                
                 <div class="col-md-6 text-end align-self-end">
                     <a href="{{ route('matriculas') }}" class="btn btn-outline-danger me-3">Cancelar</a>
                     <button class="btn btn-primary" type="submit">Nova Matricula</button>

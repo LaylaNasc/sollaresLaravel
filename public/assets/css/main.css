@@ -58,3 +58,10 @@ footer {
     text-align: center;
     padding: 6px;
 }
+
+.card-delete {
+  background-color: var(--cor-de-fundo) !important;  
+}
+   
+ 
+   
