@@ -115,6 +115,11 @@ class MatriculaController extends Controller
         return redirect()->route('matriculas');
     }
 
+    public function formBuscarProfessor()
+    {
+        return view('matricula.buscarProfessor');
+    }
+
     public function buscarProfessor(Request $request)
     {
         $search = $request->input('search');
@@ -146,18 +151,51 @@ class MatriculaController extends Controller
             ->with('message', 'Nome ou ID não corresponde a um professor válido.');
     }
 
+  
 
-    
-    
-    public function formBuscarProfessor()
+    public function formBuscarAluno()
     {
-        return view('matricula.buscarProfessor');
+        return view('matricula.buscarAluno');
     }
 
-    
+    public function buscarAluno(Request $request)
+    {
+        $search = $request->input('search');
 
+        // Verifica se o parâmetro de busca é numérico (ID) ou nome
+        if (is_numeric($search)) {
+            // Se for um ID, busca pela pessoa com esse ID
+            $aluno = Pessoa::find($search);
 
+            // Verifica se a pessoa encontrada é um aluno (não é professor)
+            if ($aluno && $aluno->matriculas()->exists()) {
+                // Se for um aluno (com matrícula), continua o processo
+                $disciplinas = Disciplina::whereHas('matriculas', function ($query) use ($aluno) {
+                    $query->where('aluno_id', $aluno->id);
+                })->with('professor', 'matriculas')->get();
 
+                return view('matricula.aluno', compact('aluno', 'disciplinas'));
+            }
+        } else {
+            // Se for uma busca por nome, buscar na tabela Pessoa para alunos
+            $aluno = Pessoa::where('nomePessoa', 'like', "%{$search}%")
+                ->whereHas('matriculas') // Garante que só retorna pessoas com matrículas
+                ->first();
+            
+            if ($aluno) {
+                // Buscar as disciplinas nas quais o aluno está matriculado
+                $disciplinas = Disciplina::whereHas('matriculas', function ($query) use ($aluno) {
+                    $query->where('aluno_id', $aluno->id);
+                })->with('professor', 'matriculas')->get();
+
+                return view('matricula.aluno', compact('aluno', 'disciplinas'));
+            }
+        }
+
+        // Se o aluno não for encontrado, retornar para a página de busca com uma mensagem de erro
+        return redirect()->route('aluno.buscar.form')
+            ->with('message', 'Aluno não encontrado.');
+    }
 
 
 

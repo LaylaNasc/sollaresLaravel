@@ -56,7 +56,9 @@ Route::middleware('auth')->group(function(){
     //rotas para dados de aluno e professor em matricula
     Route::get('/buscar-professor', [MatriculaController::class, 'formBuscarProfessor'])->name('professor.buscar.form');
     Route::get('/professor/buscar', [MatriculaController::class, 'buscarProfessor'])->name('professor.buscar');
-    Route::get('/aluno/matriculas', [MatriculaController::class, 'disciplinasPorAluno'])->name('disciplinas.aluno');
+    Route::get('/buscar-aluno', [MatriculaController::class, 'formBuscarAluno'])->name('aluno.buscar.form');
+    Route::get('/aluno/buscar', [MatriculaController::class, 'buscarAluno'])->name('aluno.buscar');
+   
     Route::get('/matriculas/imprimir/{id}', [MatriculaController::class, 'imprimirDisciplina'])->name('disciplinas.imprimir');
 
 

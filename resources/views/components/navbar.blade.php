@@ -21,7 +21,7 @@
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
               <li><a class="dropdown-item text-white" href="{{ route('matriculas') }}">Matrícula</a></li>
-              <li><a class="dropdown-item text-white" href="#">Aluno</a></li>
+              <li><a class="dropdown-item text-white" href="{{ route('aluno.buscar.form') }}">Aluno</a></li>
               <li><a class="dropdown-item text-white" href="{{ route('professor.buscar.form') }}">Professor</a></li>
               <li><a class="dropdown-item text-white" href="#">Faturamento</a></li>
             </ul>
