@@ -11,19 +11,17 @@ class UsuarioController extends Controller
 {
     // listar meus usuários.
     public function index()
-    {
-                
+    {                
         $usuarios = Usuario::all();
         $usuarios = Usuario::where('id', '!=', 1)->get(); // os dados do admin não apareceram na tabela
-        return view('usuario.usuarios', compact('usuarios'));
-    }
+        return view('usuario.index', compact('usuarios'));    }
 
     //apresentar a view
     public function create(): View
     {
         Gate::authorize('Admin') ?: abort(403, 'Você não tem autorização para criar um novo usuário.');
 
-        return view('usuario.add-usuario');
+        return view('usuario.create');
     }
 
    // submeter o formulario
@@ -51,7 +49,7 @@ class UsuarioController extends Controller
             'email' => $request->email,
         ]);
 
-        return redirect()->route('usuarios');
+        return redirect()->route('usuarios.index');
 
     }
 
@@ -62,72 +60,63 @@ class UsuarioController extends Controller
     }
 
   // apresentar view
-    public function edit(string $id)
+    public function edit(Usuario $usuario)
     {
-        if(intval($id) === 1){
-            return redirect()->route('usuarios');
+        if ($usuario->id === 1) {
+            return redirect()->route('usuarios.index');
         }
-
-        $usuario = Usuario::findOrFail($id);
-        return view('usuario.edit-usuario', compact('usuario'));
+    
+        return view('usuario.edit', compact('usuario'));
     }
 
     // alterar dados
-    public function update(Request $request)
+    public function update(Request $request, Usuario $usuario)
     {
-        $id = $request->id;
 
-        if (intval($id) === 1) {
-            return redirect()->route('usuarios');
+        if ($usuario->id === 1) {
+            return redirect()->route('usuarios.index');
         }
     
-        $usuario = Usuario::findOrFail($id);
-    
-        $data = [
+        $usuario->update([
             'nome'  => $request->nome,
             'cargo' => $request->cargo,
             'login' => $request->login,
             'email' => $request->email,
-        ];
+        ]);
     
-        // Verifica se foi enviada uma nova senha
         if ($request->filled('password')) {
-            $data['password'] = bcrypt($request->password); // Re-hasheia a nova senha
+            $usuario->password = bcrypt($request->password);
+            $usuario->save();
         }
     
-        $usuario->update($data);
-    
-        return redirect()->route('usuarios');
+        return redirect()->route('usuarios.index');
     }
 
    //só o admin pode deletar usuários
-    public function destroy(string $id)
-    {
-        Gate::authorize('Admin') ?: abort(403, 'Você não tem autorização para criar um novo usuário.'); 
+   public function destroy(Usuario $usuario)
+   {
+       Gate::authorize('Admin') ?: abort(403, 'Você não tem autorização para criar um novo usuário.');
+   
+       if ($usuario->id === 1) {
+           return redirect()->route('usuarios.index');
+       }
+   
+       $usuario->delete();
+   
+       return redirect()->route('usuarios.index');
+   }
 
-        if(intval($id) === 1 ){
-            return redirect()->route('usuarios');
-        }
+   public function deleteConfirm(Usuario $usuario)
+   {
+       Gate::authorize('Admin') ?: abort(403, 'Você não tem autorização para criar um novo usuário.');
+       
+       if ($usuario->id === 1) {
+           return redirect()->route('usuarios.index');
+       }
+   
+       return view('usuario.delete-usuario-confirm', compact('usuario'));
+   }
+    
+    
 
-        $usuario = Usuario::findOrFail($id);
-
-        return view('usuario.delete-usuario-confirm', compact('usuario'));
-
-    }
-
-    public function deleteConfirm(string $id)
-    {
-        Gate::authorize('Admin') ?: abort(403, 'Você não tem autorização para criar um novo usuário.'); 
-
-        if(intval($id) === 1 ){
-            return redirect()->route('usuarios');
-        }
-
-        $usuario = Usuario::findOrFail($id);
-
-        $usuario->delete();
-
-        return redirect()->route('usuarios');
-
-    }
 }

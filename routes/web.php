@@ -16,15 +16,10 @@ Route::post('/logout', [AutenticController::class, 'logout'])->name('logout');
 
 Route::middleware('auth')->group(function(){
     Route::view('/home', 'home');
-
-    //rotas de usuários
-    Route::get('/usuarios', [UsuarioController::class, 'index'])->name('usuarios');
-    Route::get('/usuarios/novo-usuario', [UsuarioController::class, 'create'])->name('usuarios.novo-usuario');
-    Route::post('/usuarios/criar-usuario', [UsuarioController::class, 'store'])->name('usuarios.criar-usuario');
-    Route::get('/usuarios/editar-usuario/{id}', [UsuarioController::class, 'edit'])->name('usuarios.editar-usuario');
-    Route::post('/usuarios/atualizar-usuario', [UsuarioController::class, 'update'])->name('usuarios.atualizar-usuario');
-    Route::get('/usuarios/delete-usuario/{id}', [UsuarioController::class, 'destroy'])->name('usuarios.deletar-usuario');
-    Route::get('/usuarios/delete-usuario-confirme/{id}', [UsuarioController::class, 'deleteConfirm'])->name('usuarios.deletar-usuario-confirme');
+  
+    Route::resource('usuarios', UsuarioController::class); // Rota CRUD os métodos create, store, edit, update,destroy me permitem usar essa rota
+    Route::get('/usuarios/{usuario}/delete-confirm', [UsuarioController::class, 'deleteConfirm'])
+    ->name('usuarios.deletar-usuario-confirme');
 
 
     //rotas de Pessoa
@@ -57,6 +52,14 @@ Route::middleware('auth')->group(function(){
     Route::put('/matriculas/atualizar-matricula', [MatriculaController::class, 'update'])->name('matriculas.atualizar-matricula');
     Route::get('matriculas/delete-matricula/{id}', [MatriculaController::class, 'destroy'])->name('matriculas.deletar-matricula');
     Route::get('/matriculas/delete-matricula-confirme/{id}', [MatriculaController::class, 'deleteConfirm'])->name('matriculas.deletar-matricula-confirme');
+
+    //rotas para dados de aluno e professor em matricula
+    Route::get('/buscar-professor', [MatriculaController::class, 'formBuscarProfessor'])->name('professor.buscar.form');
+    Route::get('/professor/buscar', [MatriculaController::class, 'buscarProfessor'])->name('professor.buscar');
+    Route::get('/aluno/matriculas', [MatriculaController::class, 'disciplinasPorAluno'])->name('disciplinas.aluno');
+    Route::get('/matriculas/imprimir/{id}', [MatriculaController::class, 'imprimirDisciplina'])->name('disciplinas.imprimir');
+
+
 
 
 });

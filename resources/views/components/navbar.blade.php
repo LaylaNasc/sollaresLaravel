@@ -7,7 +7,7 @@
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link active text-white" aria-current="page" href="{{ route('usuarios') }}">Usuário</a>
+            <a class="nav-link active text-white" aria-current="page" href="{{ route('usuarios.index') }}">Usuário</a>
           </li>
           <li class="nav-item">
             <a class="nav-link text-white" href="{{ route('pessoas') }}">Pessoa</a>
@@ -22,7 +22,7 @@
             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
               <li><a class="dropdown-item text-white" href="{{ route('matriculas') }}">Matrícula</a></li>
               <li><a class="dropdown-item text-white" href="#">Aluno</a></li>
-              <li><a class="dropdown-item text-white" href="#">Professor</a></li>
+              <li><a class="dropdown-item text-white" href="{{ route('professor.buscar.form') }}">Professor</a></li>
               <li><a class="dropdown-item text-white" href="#">Faturamento</a></li>
             </ul>
           </li>

@@ -7,9 +7,13 @@
             <p class="text-center">Tem certeza que deseja deletar esse usuário?</p>
             
             <div class="text-center">
-                <h3 class="my-5">{{ $usuario->nome }}</h3>
-                <a href="{{ route('usuarios') }}" class="btn btn-secondary px-5">Não</a>
-                <a href="{{ route('usuarios.deletar-usuario-confirme', ['id' => $usuario->id]) }}" class="btn btn-danger px-5">Sim</a>
+                <h3 class="my-5">{{ $usuario->nome }}</h3> 
+                <form id="delete-form" action="{{ route('usuarios.destroy', ['usuario' => $usuario->id]) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <a href="{{ route('usuarios.index') }}" class="btn btn-secondary px-5">Não</a>
+                    <button type="submit" class="btn btn-danger px-5">Sim</button>
+                </form>
             </div>
         </div>
     </div>

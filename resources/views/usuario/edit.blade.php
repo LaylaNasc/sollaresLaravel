@@ -6,8 +6,9 @@
                 <div class="card p-4 shadow-lg" style="width: 100%; max-width: 40rem;">
                     <h3 class="text-center">Editar Usuário</h3>
         
-                    <form action="{{ route('usuarios.atualizar-usuario') }}" class="row g-3 needs-validation" novalidate method="post">
+                    <form action="{{ route('usuarios.update', ['usuario' => $usuario->id]) }}" class="row g-3 needs-validation" novalidate method="post">
                         @csrf
+                        @method('PUT')
                         <input type="hidden" name="id" value="{{ $usuario->id }}">    
                         <div class="col-md-6">
                             <label for="nome" class="form-label text-dark">Nome do Usuário</label>
@@ -48,7 +49,7 @@
                             @enderror
                         </div>   
                         <div class="col-md-6 text-end align-self-end">
-                            <a href="{{ route('usuarios') }}" class="btn btn-outline-danger me-3">Cancelar</a>
+                            <a href="{{ route('usuarios.index') }}" class="btn btn-outline-danger me-3">Cancelar</a>
                             <button class="btn btn-primary" type="submit">Editar usuário</button>
                         </div>
         

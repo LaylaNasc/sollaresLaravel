@@ -115,6 +115,60 @@ class MatriculaController extends Controller
         return redirect()->route('matriculas');
     }
 
+    public function buscarProfessor(Request $request)
+    {
+        $search = $request->input('search');
+
+        // Verificar se o 'search' é um número (id) ou uma string (nome)
+        if (is_numeric($search)) {
+            // Se for um ID, verificar se existe uma pessoa associada a uma disciplina como professor
+            $professor = Pessoa::whereHas('disciplinasOfertadas', function ($query) use ($search) {
+                $query->where('professor_id', $search);
+            })->first();
+        } else {
+            // Se for um nome, procurar na tabela Pessoa associada a disciplina
+            $professor = Pessoa::where('nomePessoa', 'like', "%{$search}%")
+                ->whereHas('disciplinasOfertadas') // Garante que a pessoa é associada a alguma disciplina
+                ->first();
+        }
+
+        if ($professor) {
+            // Encontrar as disciplinas do professor
+            $disciplinas = Disciplina::where('professor_id', $professor->id)
+                ->with(['matriculas.aluno'])
+                ->get();
+
+            return view('matricula.professor', compact('professor', 'disciplinas'));
+        }
+
+        // Caso não seja encontrado professor
+        return redirect()->route('professor.buscar.form')
+            ->with('message', 'Nome ou ID não corresponde a um professor válido.');
+    }
+
+
+    
+    
+    public function formBuscarProfessor()
+    {
+        return view('matricula.buscarProfessor');
+    }
+
+    
+
+
+
+
+
+
+
+    public function imprimirDisciplina($id)
+    {
+        $disciplina = Disciplina::with(['professor', 'matriculas.aluno'])->findOrFail($id);    
+        return view('disciplinas.imprimir', compact('disciplina'));
+    }
+
+
     public function apresntarFaturamento()
     {
         //

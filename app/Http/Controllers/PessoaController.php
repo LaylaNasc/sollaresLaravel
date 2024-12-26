@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Disciplina;
 use App\Models\Pessoa;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;

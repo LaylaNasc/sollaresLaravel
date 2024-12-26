@@ -6,7 +6,7 @@
                 <div class="card p-4 shadow-lg" style="width: 100%; max-width: 40rem;">
                     <h3 class="text-center">Novo Usuário</h3>
         
-                    <form action="{{ route('usuarios.criar-usuario') }}" class="row g-3 needs-validation" novalidate method="post">
+                    <form action="{{ route('usuarios.store') }}" class="row g-3 needs-validation" novalidate method="post">
                         @csrf
         
                         <div class="col-md-6">
@@ -48,7 +48,7 @@
                             @enderror
                         </div>   
                         <div class="col-md-6 text-end align-self-end">
-                            <a href="{{ route('usuarios') }}" class="btn btn-outline-danger me-3">Cancelar</a>
+                            <a href="{{ route('usuarios.index') }}" class="btn btn-outline-danger me-3">Cancelar</a>
                             <button class="btn btn-primary" type="submit">Novo usuário</button>
                         </div>
         
